@@ -1,4 +1,4 @@
-
+@extends('layout')
 @section('content')
     <br><br><br>
     <form action="" method="post">@csrf

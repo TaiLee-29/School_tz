@@ -8,8 +8,8 @@
         <p>{{$school->email}}</p>
         <a href="#"><p>{{$school->website}}</p></a>
         <a class="bottom-button text-center" href="{{route('schools.create')}}">Create</a>
-        <a class="bottom-button text-center" href="{{route('schools.edit', $school->id)}}">Edit</a>
-        <a class="bottom-button text-center" href="{{route('schools.destroy',$school->id)}}">Delete</a>
+        <a class="bottom-button text-center" href="{{route('schools.edit', $school)}}">Edit</a>
+        <a class="bottom-button text-center" href="{{route('schools.destroy',$school)}}">Delete</a>
 
 @endsection
 

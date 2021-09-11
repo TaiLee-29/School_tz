@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SchoolCreateRequest;
 use App\Models\School;
 use Illuminate\Http\Request;
 
@@ -38,16 +39,13 @@ class SchoolController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SchoolCreateRequest $request): \Illuminate\Http\Response
     {
-       $school = new School();
-       $school->name = $request['name'];
-       $school->email = $request['email'];
-       $school->website = $request['website'];
-       $school->logo = $request['logo'];
-       $school->save();
-
-       return view('school.view', compact($school));
+        $data = $request->validated();
+         if($school = School::create($data)) {
+             return view('school.view', compact('school'));
+         }
+         return false;
     }
 
     /**
@@ -56,11 +54,10 @@ class SchoolController extends Controller
      * @param  int  $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(School $school)
     {
-        $school = School::find($id);
 
-        return view('school.view', compact($school));
+        return view('school.view', compact('school'));
     }
 
     /**
@@ -69,12 +66,10 @@ class SchoolController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(School $school)
     {
 
-        $school = School::find($id);
-
-        return view('school.form', compact($school));
+        return view('school.form', compact('school'));
     }
 
     /**
@@ -84,16 +79,16 @@ class SchoolController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, School $school)
     {
-        $school = School::find($id);
+
         $school->name = $request['name'];
         $school->email = $request['email'];
         $school->website = $request['website'];
         $school->logo = $request['logo'];
         $school->save();
 
-        return view('school.view', compact($school));
+        return view('school.view', compact('school'));
     }
 
     /**
@@ -102,9 +97,8 @@ class SchoolController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(School $school)
     {
-        $school = School::find($id);
         $school->delete();
 
         return redirect()->route('index');

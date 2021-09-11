@@ -2,7 +2,7 @@
 
 @section('content')
     <br><br><br>
-    <form action="" method="post">@csrf
+    <form action="" method="">@csrf
         <div class="mb-3">
             <label for="name" class="name">Name</label>
             <input type="text" class="form-control" name="name" id="name" value="{{$school->name}}" >

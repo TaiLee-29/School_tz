@@ -9,6 +9,12 @@ class School extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'email',
+        'logo',
+        'website'
+    ];
     /**
      * @var mixed
      */
