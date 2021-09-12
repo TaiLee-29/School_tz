@@ -4,7 +4,7 @@
     @auth<p> {{ auth()->user()->name }}</p>@endauth
 
     <h1>{{$employee->first_name}}{{$employee->last_name}}</h1>
-    <h1></h1>
+    <h2>School: {{$employee->email}}</h2>
     <p>{{$employee->email}}</p>
     <a href="#"><p>{{$employee->phone}}</p></a>
     <a class="bottom-button text-center" href="{{route('employees.create')}}">Create</a>

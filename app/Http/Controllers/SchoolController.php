@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SchoolCreateRequest;
+use App\Http\Requests\SchoolUpdateRequest;
 use App\Models\School;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class SchoolController extends Controller
 {
@@ -30,7 +33,7 @@ class SchoolController extends Controller
 
         $school = new School();
 
-        return view('school.form', compact('school'));
+        return view('school.createform', compact('school'));
     }
 
     /**
@@ -39,10 +42,13 @@ class SchoolController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(SchoolCreateRequest $request): \Illuminate\Http\Response
+    public function store(SchoolCreateRequest $request)
     {
         $data = $request->validated();
+        $path = $request->logo->storeAs( 'public/schools', Str::random(25) . '.' . $request->logo->getClientOriginalExtension());
+         $data['logo'] = Storage::url($path);
          if($school = School::create($data)) {
+
              return view('school.view', compact('school'));
          }
          return false;
@@ -79,16 +85,18 @@ class SchoolController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, School $school)
+    public function update(SchoolUpdateRequest  $request, School $school)
     {
+        $data = $request->validated();
 
-        $school->name = $request['name'];
-        $school->email = $request['email'];
-        $school->website = $request['website'];
-        $school->logo = $request['logo'];
-        $school->save();
+        $path = $request->logo->storeAs( 'public/schools', Str::random(25) . '.' . $request->logo->getClientOriginalExtension());
+        $data['logo'] = Storage::url($path);
+        if($school->update($data)) {
 
-        return view('school.view', compact('school'));
+            return view('school.view', compact('school'));
+        }
+        return false;
+
     }
 
     /**
@@ -101,6 +109,6 @@ class SchoolController extends Controller
     {
         $school->delete();
 
-        return redirect()->route('index');
+        return redirect()->route('schools.index');
     }
 }

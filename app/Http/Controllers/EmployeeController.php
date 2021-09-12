@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EmployeeCreateRequest;
 use App\Models\Employee;
-use App\Models\School;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
@@ -28,8 +28,8 @@ class EmployeeController extends Controller
     public function create()
     {
         $employee = new Employee();
-
-        return view('employee.form', compact('employee'));
+        $schools = $employee->allschools();
+        return view('employee.createform', compact('employee', 'schools'));
     }
 
     /**
@@ -38,17 +38,14 @@ class EmployeeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(EmployeeCreateRequest  $request)
     {
-        $employee = new Employee();
-        $employee->first_name = $request['first_name'];
-        $employee->last_name = $request['last_name'];
-        $employee->email = $request['email'];
-        $employee->phone = $request['phone'];
-        $employee->school_id = School::find($request['school_id']);
-        $employee->save();
 
-        return view('employee.view', compact($employee));
+        $data = $request->validated();
+        if($employee = Employee::create($data)) {
+            return view('employee.view', compact('employee'));
+        }
+        return false;
     }
 
     /**
@@ -61,7 +58,7 @@ class EmployeeController extends Controller
     {
        $employee = Employee::find($id);
 
-       return view('employee.view', compact($employee));
+       return view('employee.view', compact('employee'));
 
     }
 
@@ -74,8 +71,8 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         $employee = Employee::find($id);
-
-        return view('employee.form', compact($employee));
+        $schools = $employee->allschools();
+        return view('employee.form', compact('employee','schools'));
     }
 
     /**
@@ -85,17 +82,13 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Employee $employee)
     {
-        $employee = Employee::find($id);
-        $employee->first_name = $request['first_name'];
-        $employee->last_name = $request['last_name'];
-        $employee->email = $request['email'];
-        $employee->phone = $request['phone'];
-        $employee->school_id = $request['school_id'];
-        $employee->save();
+        if($employee->update($request->all())) {
 
-        return view('employee.view', compact($employee));
+            return view('employee.view', compact('employee'));
+        }
+        return false;
     }
 
     /**
@@ -104,11 +97,11 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Employee $employee)
     {
-        $employee = employee::find($id);
+
         $employee->delete();
 
-        return redirect()->route('index');
+        return redirect()->route('employees.index');
     }
 }

@@ -29,6 +29,9 @@
                 font-size: 3.5rem;
             }
         }
+        .navbarforpaginate {
+          text-align: center;
+        }
     </style>
 
 
@@ -39,14 +42,13 @@
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{{route('schools.index')}}">Schools</a>
-        <a class="navbar-brand" href="{{route('employees.index')}}">Employees</a>
+        @auth()<a class="navbar-brand" href="{{route('schools.index')}}">Schools</a>@endauth
+       @auth() <a class="navbar-brand" href="{{route('employees.index')}}">Employees</a>@endauth
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         @guest()<a class="navbar-brand" href="/auth/login">Login</a>@endguest
-        @auth()<a class="navbar-brand" href="{{route('create')}}">Create</a>@endauth
         @auth()<a class="navbar-brand" href="/auth/logout">Logout</a>@endauth
 
 
@@ -54,8 +56,11 @@
 </nav>
 
 <main class="container">
-
-    <div class="starter-template text-center py-5 px-3">
+    <div class=" text-center py-5 px-3">
+        @yield('link')
+    </div>
+    <br>
+    <div class=" text-left py-5 px-3">
         @yield('content')
     </div>
 

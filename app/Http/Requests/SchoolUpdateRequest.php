@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SchoolCreateRequest extends FormRequest
+class SchoolUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,7 @@ class SchoolCreateRequest extends FormRequest
 
         return [
             'name'=>['required','string'],
-            'email' => ['required', 'unique:schools,email,', 'email:rfc,dns'],
+            'email' => ['required', 'email:rfc,dns'],
             'logo'=>['image'],
             'website'=>['string']
         ];

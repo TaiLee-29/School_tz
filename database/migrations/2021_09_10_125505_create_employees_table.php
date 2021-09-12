@@ -17,13 +17,16 @@ class CreateEmployeesTable extends Migration
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
-            $table->unsignedBigInteger('school_id');
+            $table->foreignId('school_id')
+                ->constrained('schools')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->string('email')->unique();
             $table->string('phone')->unique();
             $table->timestamps();
 
 
-            $table->foreign('school_id')->references('id')->on('schools');
+            //$table->foreign('school_id')->references('id')->on();
         });
     }
 
@@ -34,6 +37,9 @@ class CreateEmployeesTable extends Migration
      */
     public function down()
     {
+        Schema::table('employees', function (Blueprint $table) {
+            $table->dropForeign('employees_school_id_foreign');
+        });
         Schema::dropIfExists('employees');
     }
 }
