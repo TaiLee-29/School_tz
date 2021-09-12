@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EmployeeCreateRequest;
+use App\Http\Requests\EmployeeUpdateRequest;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 
@@ -82,13 +83,15 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Employee $employee)
+    public function update(EmployeeUpdateRequest $request, Employee $employee)
     {
-        if($employee->update($request->all())) {
+        $data = $request->validated();
 
+        if($employee->update($data)) {
             return view('employee.view', compact('employee'));
         }
         return false;
+
     }
 
     /**

@@ -1,8 +1,12 @@
 @extends('layout')
 @section('content')
     <br><br><br>
-    <form action="{{route('employees.update',$employee->id)}}" method="post">@csrf
+    <form action="{{route('employees.update',$employee)}}" method="post">@csrf
         @method('PUT')
+
+
+
+
         <div class="mb-3">
             <label for="first_name" class="first_name">First Name</label>
             <input type="text" class="form-control" name="first_name" id="first_name" value="{{$employee->first_name}}" >
